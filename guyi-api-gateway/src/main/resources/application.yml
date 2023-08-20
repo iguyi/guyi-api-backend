@@ -1,0 +1,32 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+logging:
+  # 设置日志级别
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace
+spring:
+  cloud:
+    gateway:
+      # 添加请求头，达到染色效果
+      default-filters:
+        - AddResponseHeader=source, guyi
+      # 转发规则
+      routes:
+        - id: api_route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/**
+dubbo:
+  application:
+    name: dubbo-springboot-demo-consumer
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848
